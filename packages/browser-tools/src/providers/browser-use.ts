@@ -8,7 +8,7 @@ import {
 	type ProviderSessionCreateOptions,
 } from "../provider.js";
 
-const DEFAULT_BROWSER_USE_ENDPOINT = "https://api.browser-use.com/api/v3";
+const DEFAULT_BROWSER_USE_ENDPOINT = "https://api.browser-use.com/api/v4";
 
 export type BrowserUseBrowserProviderOptions = {
 	apiKey?: string;

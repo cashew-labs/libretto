@@ -1,10 +1,14 @@
 import { randomUUID } from "node:crypto";
-import { expect, test as base } from "vitest";
+import { afterEach, expect, test as base, vi } from "vitest";
 import { createBrowserTools } from "../create-browser-tools.js";
 import { BrowserUseBrowserProvider } from "./browser-use.js";
 
 const hasBrowserUseApiKey = Boolean(process.env.BROWSER_USE_API_KEY?.trim());
-const endpoint = "https://api.browser-use.com/api/v3";
+const endpoint = "https://api.browser-use.com/api/v4";
+
+afterEach(() => {
+	vi.unstubAllGlobals();
+});
 
 type ProfileListResponse = {
 	items: Array<{ id: string; name?: string | null }>;
@@ -78,6 +82,42 @@ const test = base.extend<{
 			throw new AggregateError(cleanupErrors, "Browser Use test cleanup failed.");
 		}
 	},
+});
+
+test("uses Browser Use V4 by default", async () => {
+	const fetchMock = vi
+		.fn<typeof fetch>()
+		.mockResolvedValueOnce(
+			new Response(
+				JSON.stringify({
+					id: "browser-use-1",
+					cdpUrl: "wss://browser-use.test/devtools/browser/1",
+				}),
+				{ status: 201 },
+			),
+		)
+		.mockResolvedValueOnce(new Response(null, { status: 200 }));
+	vi.stubGlobal("fetch", fetchMock);
+	const provider = new BrowserUseBrowserProvider({ apiKey: "test-key" });
+
+	const session = await provider.createSession();
+	if (session instanceof Error) throw session;
+	expect(session.cdpEndpoint).toBe(
+		"wss://browser-use.test/devtools/browser/1",
+	);
+	expect(fetchMock).toHaveBeenNthCalledWith(
+		1,
+		"https://api.browser-use.com/api/v4/browsers",
+		expect.objectContaining({ method: "POST" }),
+	);
+
+	const closed = await provider.closeSession(session.sessionId);
+	if (closed instanceof Error) throw closed;
+	expect(fetchMock).toHaveBeenNthCalledWith(
+		2,
+		"https://api.browser-use.com/api/v4/browsers/browser-use-1",
+		expect.objectContaining({ method: "PATCH" }),
+	);
 });
 
 test.runIf(hasBrowserUseApiKey)(
