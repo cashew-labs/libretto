@@ -1,5 +1,5 @@
 import { getHelpText, parseCliArgs } from "./parse-args.js";
-import { startMcpStdioServer } from "./run-mcp.js";
+import { startMcpServer } from "./run-mcp.js";
 
 /**
  * CLI entry used by the package bin. Writes help and errors to stderr so they
@@ -21,7 +21,7 @@ export async function runCli(argv: readonly string[]): Promise<void> {
 		return;
 	}
 
-	const started = await startMcpStdioServer(parsed.options);
+	const started = await startMcpServer(parsed.options);
 	if (started instanceof Error) {
 		process.stderr.write(
 			`${started.message}\n\n${getHelpText()}\n`,

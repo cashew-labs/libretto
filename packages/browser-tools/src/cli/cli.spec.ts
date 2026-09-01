@@ -29,6 +29,10 @@ test("parseCliArgs accepts bare invocation and mcp subcommand with domain flags"
 			headless: true,
 			allowedDomains: [],
 			blockedDomains: [],
+			transport: "stdio",
+			host: "127.0.0.1",
+			port: 40103,
+			path: "/mcp",
 		},
 	});
 	expect(
@@ -40,6 +44,10 @@ test("parseCliArgs accepts bare invocation and mcp subcommand with domain flags"
 			headless: false,
 			allowedDomains: ["example.com"],
 			blockedDomains: [],
+			transport: "stdio",
+			host: "127.0.0.1",
+			port: 40103,
+			path: "/mcp",
 		},
 	});
 	expect(parseCliArgs(["--blocked-domain=ads.example.com"])).toEqual({
@@ -49,6 +57,10 @@ test("parseCliArgs accepts bare invocation and mcp subcommand with domain flags"
 			headless: true,
 			allowedDomains: [],
 			blockedDomains: ["ads.example.com"],
+			transport: "stdio",
+			host: "127.0.0.1",
+			port: 40103,
+			path: "/mcp",
 		},
 	});
 	expect(parseCliArgs(["--provider", "kernel"])).toEqual({
@@ -58,6 +70,10 @@ test("parseCliArgs accepts bare invocation and mcp subcommand with domain flags"
 			headless: true,
 			allowedDomains: [],
 			blockedDomains: [],
+			transport: "stdio",
+			host: "127.0.0.1",
+			port: 40103,
+			path: "/mcp",
 		},
 	});
 	expect(parseCliArgs(["--provider=libretto-cloud"])).toEqual({
@@ -67,11 +83,22 @@ test("parseCliArgs accepts bare invocation and mcp subcommand with domain flags"
 			headless: true,
 			allowedDomains: [],
 			blockedDomains: [],
+			transport: "stdio",
+			host: "127.0.0.1",
+			port: 40103,
+			path: "/mcp",
 		},
 	});
 });
 
-test("parseCliArgs reports unknown flags and providers with recovery text", () => {
+	test("parseCliArgs accepts streamable HTTP settings", () => {
+	expect(parseCliArgs(["mcp", "--transport", "streamable-http", "--host", "0.0.0.0", "--port", "0", "--path", "mcp"])).toMatchObject({
+	kind: "mcp",
+	options: { transport: "streamable-http", host: "0.0.0.0", port: 0, path: "/mcp" },
+	});
+	});
+
+	test("parseCliArgs reports unknown flags and providers with recovery text", () => {
 	const unknownFlag = parseCliArgs(["--wat"]);
 	expect(unknownFlag).toMatchObject({
 		kind: "error",
@@ -189,6 +216,6 @@ test("--help prints usage on stderr without starting an MCP server", async () =>
 		child.once("close", () => resolve());
 	});
 	const stderr = Buffer.concat(stderrChunks).toString("utf8");
-	expect(stderr).toContain("Start a stdio MCP server");
+	expect(stderr).toContain("Start an MCP server");
 	expect(stderr).toContain('args ["-y", "libretto-browser-tools"]');
 });

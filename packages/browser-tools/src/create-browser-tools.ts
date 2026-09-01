@@ -31,7 +31,10 @@ export type BrowserToolkit = {
 	dispose(): Promise<BrowserCleanupError | null>;
 }
 
-export type BrowserToolkitOptions = DomainPolicyOptions;
+export type BrowserToolkitOptions = DomainPolicyOptions & {
+	/** Default profile behavior for browser_open when authProfile is omitted. */
+	defaultAuthProfile?: string | false;
+};
 
 export type BorrowedPageBrowserToolkit = {
 	sessionId: string;

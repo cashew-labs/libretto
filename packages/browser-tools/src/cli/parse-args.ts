@@ -9,6 +9,10 @@ export type McpCliOptions = {
 	headless: boolean;
 	allowedDomains: string[];
 	blockedDomains: string[];
+	transport: "stdio" | "streamable-http";
+	host: string;
+	port: number;
+	path: string;
 };
 
 export type ParsedCli =
@@ -16,7 +20,7 @@ export type ParsedCli =
 	| { kind: "error"; message: string; recovery: string }
 	| { kind: "mcp"; options: McpCliOptions };
 
-const HELP = `Start a stdio MCP server that exposes Libretto browser tools.
+const HELP = `Start an MCP server that exposes Libretto browser tools.
 
 Usage:
   libretto-browser-tools [mcp] [options]
@@ -27,6 +31,10 @@ Options:
   --headed                 Show the browser window (default: headless)
   --allowed-domain <host>  Allow http(s) navigation to this host (repeatable)
   --blocked-domain <host>  Block http(s) navigation to this host (repeatable)
+  --transport <name>       MCP transport: stdio or streamable-http (default: stdio)
+  --host <address>         HTTP bind address (default: 127.0.0.1)
+  --port <number>          HTTP port (default: 40103)
+  --path <path>            HTTP MCP path (default: /mcp)
   -h, --help               Show this help
 
 Cloud providers read API keys from the environment (for example KERNEL_API_KEY).
@@ -70,6 +78,10 @@ export function parseCliArgs(argv: readonly string[]): ParsedCli {
 	let headless = true;
 	const allowedDomains: string[] = [];
 	const blockedDomains: string[] = [];
+	let transport: "stdio" | "streamable-http" = "stdio";
+	let host = "127.0.0.1";
+	let port = 40103;
+	let path = "/mcp";
 
 	for (let i = 0; i < tokens.length; i++) {
 		const token = tokens[i];
@@ -175,6 +187,24 @@ export function parseCliArgs(argv: readonly string[]): ParsedCli {
 			continue;
 		}
 
+		if (token === "--transport" || token === "--host" || token === "--port" || token === "--path") {
+			const value = tokens[++i];
+			if (value === undefined || (token !== "--port" && value.startsWith("-"))) {
+				return missingFlagValue(token, `${token} ${token === "--transport" ? "streamable-http" : token === "--port" ? "40103" : token === "--path" ? "/mcp" : "127.0.0.1"}`);
+			}
+			if (token === "--transport") {
+				if (value !== "stdio" && value !== "streamable-http") return { kind: "error", message: `Unknown transport: ${value}`, recovery: "Use `stdio` or `streamable-http`." };
+				transport = value;
+			} else if (token === "--host") host = value;
+			else if (token === "--path") path = value.startsWith("/") ? value : `/${value}`;
+			else {
+				const parsedPort = Number(value);
+				if (!Number.isInteger(parsedPort) || parsedPort < 0 || parsedPort > 65535) return { kind: "error", message: `Invalid port: ${value}`, recovery: "Use a number from 0 through 65535." };
+				port = parsedPort;
+			}
+			continue;
+		}
+
 		return {
 			kind: "error",
 			message: `Unknown argument: ${token}`,
@@ -185,6 +215,6 @@ export function parseCliArgs(argv: readonly string[]): ParsedCli {
 
 	return {
 		kind: "mcp",
-		options: { provider, headless, allowedDomains, blockedDomains },
+		options: { provider, headless, allowedDomains, blockedDomains, transport, host, port, path },
 	};
 }
