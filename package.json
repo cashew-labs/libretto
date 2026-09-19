@@ -38,6 +38,9 @@
     "cli": "pnpm -s --filter libretto cli",
     "create-tmp-workspace": "pnpm --filter @libretto/dev-tools create-tmp-workspace",
     "website:dev": "pnpm --dir ./apps/website dev",
-    "website:brand-kit": "pnpm --dir ./apps/website brand-kit"
+    "website:brand-kit": "pnpm --dir ./apps/website brand-kit",
+    "desktop-runner:dev": "pnpm --filter @libretto/desktop-runner electron:dev",
+    "desktop-runner:pack": "pnpm --filter @libretto/desktop-runner electron:pack",
+    "desktop-runner:installer": "pnpm --filter @libretto/desktop-runner electron:installer"
   }
 }

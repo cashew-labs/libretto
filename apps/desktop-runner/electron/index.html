@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Libretto Workflow Runner</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="top-bar">
+        <span class="product-name">Libretto / Workflow Runner</span>
+        <span class="platform-label">Windows / Local</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">// TypeScript automation</p>
+        <h1 id="page-title">Run a workflow<br /><em>on this computer.</em></h1>
+        <p class="intro-copy">
+          Import one trusted Libretto file. The runtime and browser are already included.
+        </p>
+      </section>
+
+      <section class="runner-panel" aria-labelledby="workflow-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-code">// 01 — Workflow file</p>
+            <h2 id="workflow-heading">Choose what to run</h2>
+          </div>
+          <span id="status" class="status" data-state="ready">Ready</span>
+        </div>
+
+        <button id="choose-file" class="file-picker" type="button">
+          <span class="file-picker-label">Browse for .ts or .tsx</span>
+          <span id="file-name" class="file-name">No workflow selected</span>
+        </button>
+        <p id="file-path" class="file-path"></p>
+
+        <label class="option-row" for="show-browser">
+          <input id="show-browser" type="checkbox" checked />
+          <span>
+            <strong>Show browser while running</strong>
+            <small>Recommended when a website requires sign-in or verification.</small>
+          </span>
+        </label>
+
+        <div class="actions">
+          <button id="run" class="primary-button" type="button" disabled>
+            Run workflow
+          </button>
+          <button id="stop" class="secondary-button" type="button" disabled>
+            Stop
+          </button>
+        </div>
+      </section>
+
+      <section class="output-panel" aria-labelledby="output-heading">
+        <div class="output-heading-row">
+          <div>
+            <p class="section-code">// 02 — Run output</p>
+            <h2 id="output-heading">Activity</h2>
+          </div>
+          <button id="clear-output" class="text-button" type="button">Clear</button>
+        </div>
+        <pre id="output" aria-live="polite">Choose a workflow to begin.</pre>
+      </section>
+
+      <p class="security-note">
+        TypeScript files can access this computer. Only run files you trust.
+      </p>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>

@@ -32,6 +32,8 @@ allowBuilds:
   '@google/genai': false
   agent-browser: true
   dev-browser: true
+  electron: true
+  electron-winstaller: true
   esbuild: true
   fallow: false
   glimpseui: false

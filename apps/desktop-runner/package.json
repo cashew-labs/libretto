@@ -1,0 +1,64 @@
+{
+  "name": "@libretto/desktop-runner",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A minimal Windows desktop runner for trusted Libretto TypeScript workflows.",
+  "author": "Libretto contributors",
+  "type": "module",
+  "main": "dist/electron/main.js",
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "browser:install": "node scripts/install-browser.mjs",
+    "electron:dev": "pnpm --filter libretto build && pnpm build && pnpm browser:install && electron dist/electron/main.js",
+    "electron:pack": "pnpm --filter libretto build && pnpm build && pnpm browser:install && electron-builder --win --dir",
+    "electron:installer": "pnpm --filter libretto build && pnpm build && pnpm browser:install && electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "sh.libretto.workflow-runner",
+    "productName": "Libretto Workflow Runner",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".playwright-browsers",
+        "to": "playwright-browsers",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "signExecutable": false
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "allowElevation": false,
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "asar": false
+  },
+  "dependencies": {
+    "libretto": "workspace:*",
+    "playwright": "catalog:",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "electron": "^41.10.7",
+    "electron-builder": "^26.15.3",
+    "typescript": "~5.9.3"
+  }
+}

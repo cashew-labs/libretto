@@ -8,6 +8,8 @@ dist/
 .vscode/settings.json
 .env
 .playwright-cli/
+/apps/desktop-runner/.playwright-browsers/
+/apps/desktop-runner/release/
 temp/
 benchmarks/**/runs/
 packages/**/benchmarks/runs/
