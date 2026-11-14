@@ -133,7 +133,6 @@ function DebugAgentsHero() {
             <HeroResourceLinks
               docsHref="/docs/understand-libretto/autofix-debugging"
               docsFathomEvent="Debug agents hero docs click"
-              talkFathomEvent="Debug agents hero talk to dev click"
             />
           </div>
         </div>
