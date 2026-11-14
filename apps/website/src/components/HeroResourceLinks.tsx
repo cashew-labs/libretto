@@ -1,9 +1,6 @@
-const TALK_TO_A_DEV_URL = "https://cal.com/team/libretto/demo";
-
 interface HeroResourceLinksProps {
   docsHref: string;
   docsFathomEvent: string;
-  talkFathomEvent: string;
 }
 
 const linkClass =
@@ -12,7 +9,6 @@ const linkClass =
 export function HeroResourceLinks({
   docsHref,
   docsFathomEvent,
-  talkFathomEvent,
 }: HeroResourceLinksProps) {
   const resolvedDocsHref =
     import.meta.env.DEV && docsHref.startsWith("/docs/")
@@ -27,16 +23,6 @@ export function HeroResourceLinks({
         data-fathom-event={docsFathomEvent}
       >
         Docs
-      </a>
-      <span aria-hidden="true" className="text-faint">
-        ·
-      </span>
-      <a
-        href={TALK_TO_A_DEV_URL}
-        className={linkClass}
-        data-fathom-event={talkFathomEvent}
-      >
-        Talk to a dev
       </a>
     </div>
   );

@@ -61,7 +61,6 @@ function CliHero() {
             <HeroResourceLinks
               docsHref="/docs/get-started/quickstart"
               docsFathomEvent="CLI hero docs click"
-              talkFathomEvent="CLI hero demo click"
             />
           </div>
         </div>

@@ -234,12 +234,6 @@
           "href": "https://github.com/saffron-health/libretto/releases",
           "icon": "lucide:history",
           "placement": "sidebar"
-        },
-        {
-          "anchor": "Talk to a dev",
-          "href": "https://cal.com/team/libretto/demo",
-          "icon": "video",
-          "placement": "sidebar"
         }
       ]
     }

@@ -105,7 +105,6 @@ function BrowserToolsHero() {
             <HeroResourceLinks
               docsHref="/docs/browser-tools/quickstart"
               docsFathomEvent="Browser tools hero docs click"
-              talkFathomEvent="Browser tools hero talk to dev click"
             />
           </div>
         </div>
